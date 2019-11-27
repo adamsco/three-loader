@@ -48,8 +48,10 @@ export class Potree implements IPotree {
     url: string,
     getUrl: GetUrlFn,
     xhrRequest = (input: RequestInfo, init?: RequestInit) => fetch(input, init),
+    vertexShader?: string,
+    fragmentShader?: string,
   ): Promise<PointCloudOctree> {
-    return loadPOC(url, getUrl, xhrRequest).then(geometry => new PointCloudOctree(this, geometry));
+    return loadPOC(url, getUrl, xhrRequest).then(geometry => new PointCloudOctree(this, geometry, undefined, vertexShader, fragmentShader));
   }
 
   updatePointClouds(

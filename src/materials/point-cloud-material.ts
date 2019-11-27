@@ -31,6 +31,8 @@ export interface IPointCloudMaterialParameters {
   minSize: number;
   maxSize: number;
   treeType: TreeType;
+  vertexShaderPath: string;
+  fragmentShaderPath: string;
 }
 
 export interface IPointCloudMaterialUniforms {
@@ -244,6 +246,9 @@ export class PointCloudMaterial extends RawShaderMaterial {
     indices: { type: 'fv', value: [] },
   };
 
+  private customVertexShaderPath: string | undefined;
+  private customFragmentShaderPath: string | undefined;
+
   constructor(parameters: Partial<IPointCloudMaterialParameters> = {}) {
     super();
 
@@ -264,6 +269,9 @@ export class PointCloudMaterial extends RawShaderMaterial {
     this.defaultAttributeValues.indices = [0, 0, 0, 0];
 
     this.vertexColors = VertexColors;
+
+    this.customVertexShaderPath = parameters.vertexShaderPath;
+    this.customFragmentShaderPath = parameters.fragmentShaderPath;
 
     this.updateShaderSource();
   }
@@ -293,8 +301,12 @@ export class PointCloudMaterial extends RawShaderMaterial {
   }
 
   updateShaderSource(): void {
-    this.vertexShader = this.applyDefines(require('./shaders/pointcloud.vert').default);
-    this.fragmentShader = this.applyDefines(require('./shaders/pointcloud.frag').default);
+
+    const vertexShaderPath = this.customVertexShaderPath ? this.customVertexShaderPath : './shaders/pointcloud.vert';
+    const fragmentShaderPath = this.customFragmentShaderPath ? this.customFragmentShaderPath : './shaders/pointcloud.frag';
+
+    this.vertexShader = this.applyDefines(require(vertexShaderPath).default);
+    this.fragmentShader = this.applyDefines(require(fragmentShaderPath).default);
 
     if (this.opacity === 1.0) {
       this.blending = NoBlending;
