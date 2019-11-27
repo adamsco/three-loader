@@ -88,8 +88,8 @@ export class PointCloudOctree extends PointCloudTree {
     potree: IPotree,
     pcoGeometry: PointCloudOctreeGeometry,
     material?: PointCloudMaterial,
-    vertexShader?: string,
-    fragmentShader?: string,
+    vertexShaderPath?: string,
+    fragmentShaderPath?: string,
   ) {
     super();
 
@@ -103,7 +103,7 @@ export class PointCloudOctree extends PointCloudTree {
     this.position.copy(pcoGeometry.offset);
     this.updateMatrix();
 
-    this.material = material || new PointCloudMaterial({vertexShader, fragmentShader});
+    this.material = material || new PointCloudMaterial({vertexShaderPath, fragmentShaderPath});
     this.initMaterial(this.material);
   }
 
